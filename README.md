@@ -39,3 +39,5 @@ Run `npm ci`, `npm test`, `npm run build`, then `npm start`. Node 24 is supporte
 See AI_USAGE.md. MIT licensed. This prototype has not undergone an independent security audit.
 
 Source repositories: [frontend](https://github.com/KaiVenn52/invoiceguard), [contracts](https://github.com/KaiVenn52/invoiceguard-contracts). Clone both into the same parent directory for artifact synchronization.
+
+The GitHub Pages workflow builds with `VITE_DIRECT_RPC=true` to call only the official Aevum RPC directly. Its CORS preflight allows the public origin and content-type header. Default local/Node builds continue to use the fixed server proxy.
