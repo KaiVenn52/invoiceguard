@@ -1,5 +1,7 @@
 # InvoiceGuard
 
+[Open public demo](https://kaivenn52.github.io/invoiceguard/) · [Validated deployment](https://github.com/KaiVenn52/invoiceguard/actions/runs/44125293861)
+
 Every invoice. One exact payment. A noncustodial stablecoin invoice workspace for Aevum testnet: the merchant registers an invoice, shares it as JSON, and the customer pays through a contract that settles only once.
 
 ## Run and use
@@ -26,7 +28,7 @@ The contract rejects duplicate IDs, replayed payments, expired/cancelled invoice
 
 ## Submission gates
 
-Still required: actual Aevum deployment and payments, public repository/demo, walkthrough, registration and submission receipt. The starter guide requires a live finalist presentation if selected.
+Public frontend, contracts source and hosted demo are available. Still required: actual Aevum contract deployment and payments, walkthrough, registration and submission receipt. The starter guide requires a live finalist presentation if selected.
 
 ## Evidence and limitations
 
