@@ -43,3 +43,7 @@ See AI_USAGE.md. MIT licensed. This prototype has not undergone an independent s
 Source repositories: [frontend](https://github.com/KaiVenn52/invoiceguard), [contracts](https://github.com/KaiVenn52/invoiceguard-contracts). Clone both into the same parent directory for artifact synchronization.
 
 The GitHub Pages workflow builds with `VITE_DIRECT_RPC=true` to call only the official Aevum RPC directly. Its CORS preflight allows the public origin and content-type header. Default local/Node builds continue to use the fixed server proxy.
+
+### Deploy from the browser
+
+Open **Set up a settlement contract** in the public app. Connect an EVM wallet on Aevum testnet, fund it with test tQDAY and choose **Deploy on Aevum testnet**. The app uses the compiled creation bytecode and official tUSD8, then checks the returned contract's runtime. If confirmation times out, **Load deployment address** resumes from the recorded transaction. After registering an invoice, **Create payment link** generates a link which automatically imports its terms into the recipient's browser. The link contains the invoice reference and customer name.
