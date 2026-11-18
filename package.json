@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "node --test tests/*.test.mjs",
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "check:aevum": "node scripts/check-aevum.mjs"
   },
   "dependencies": {
     "react": "18.3.1",

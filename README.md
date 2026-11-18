@@ -47,3 +47,18 @@ The GitHub Pages workflow builds with `VITE_DIRECT_RPC=true` to call only the of
 ### Deploy from the browser
 
 Open **Set up a settlement contract** in the public app. Connect an EVM wallet on Aevum testnet, fund it with test tQDAY and choose **Deploy on Aevum testnet**. The app uses the compiled creation bytecode and official tUSD8, then checks the returned contract's runtime. If confirmation times out, **Load deployment address** resumes from the recorded transaction. After registering an invoice, **Create payment link** generates a link which automatically imports its terms into the recipient's browser. The link contains the invoice reference and customer name.
+
+### Chain preflight and architecture
+
+Run `npm run check:aevum` to check the live testnet ID, official token decimals, and the exact runtime produced by the contract constructor at a named block. The script uses `eth_call` without a wallet or gas. Its output records a deployment simulation. A broadcast deployment and successful invoice settlement still produce their own transaction receipts.
+
+```mermaid
+flowchart LR
+  M[Merchant browser] -->|Register with merchant wallet| G[InvoiceGuard on Aevum]
+  M -->|Share payment link| B[Customer browser]
+  B -->|Check on-chain invoice and approve exact amount| T[Official tUSD8]
+  B -->|Settle once| G
+  G -->|Transfer to merchant| T
+  G -->|InvoicePaid event| R[Receipt verification]
+  T -->|Exact Transfer event| R
+```
