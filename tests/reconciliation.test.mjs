@@ -46,12 +46,12 @@ test('finds a paid invoice in bounded log windows, then verifies the full receip
   });
   context.mock.method(client, 'getTransactionReceipt', async ({ hash }) => {
     assert.equal(hash, txHash);
-    const receipt = { ...fixture(), blockNumber: 17999n };
+    const receipt = { ...fixture(), blockNumber: 18999n };
     receipt.logs[0].topics[1] = registered.id;
     return receipt;
   });
   const proof = await findPayment(registered, guard);
-  assert.deepEqual(queries, [[18001n, 20000n], [16001n, 18000n]]);
+  assert.deepEqual(queries, [[19001n, 20000n], [18001n, 19000n]]);
   assert.equal(proof.hash, txHash);
   assert(proof.checks.every(({pass}) => pass));
 });

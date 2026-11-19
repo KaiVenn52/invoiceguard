@@ -383,7 +383,8 @@ const invoicePaidEvent = parseAbiItem(
   "event InvoicePaid(bytes32 indexed id, address indexed payer, address indexed payee, uint256 amount)",
 );
 const SEARCH_BLOCKS = 10_000n;
-const LOG_WINDOW = 2_000n;
+// The public Aevum RPC limits eth_getLogs to 1,000 blocks per request.
+const LOG_WINDOW = 1_000n;
 
 async function invoiceRecord(guard: Address, invoice: Invoice & { id: Hex }) {
   const record = (await client.readContract({
