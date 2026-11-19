@@ -11,6 +11,7 @@ import {
   toHex,
   encodeAbiParameters,
   parseAbiParameters,
+  parseAbiItem,
   type Address,
   type Hex,
 } from "viem";
@@ -309,7 +310,11 @@ export async function registerInvoice(v: Invoice, contract: string) {
   );
   return { id, createHash: hash, contract: guard };
 }
-export function validateRegistered(v: Invoice, guard: Address, record: any[]) {
+export function validateRegistered(
+  v: Invoice,
+  guard: Address,
+  record: readonly unknown[],
+) {
   const expectedId = keccak256(
     encodeAbiParameters(parseAbiParameters("uint256,address,address,bytes32"), [
       44005n,
@@ -374,34 +379,85 @@ export async function payInvoice(v: Invoice, contract: string) {
   });
   return hash;
 }
-export async function verifyInvoice(
-  v: Invoice,
-  contract: string,
-  hash: string,
-) {
-  if (!v.id || v.sample)
-    throw Error("Select an invoice registered on testnet first.");
-  if (!/^0x[0-9a-fA-F]{64}$/.test(hash))
-    throw Error("Invalid transaction hash.");
-  boundContract(v, contract);
-  const guard = await checkContract(contract);
-  const [receipt, tx, chain] = await Promise.all([
-    client.getTransactionReceipt({ hash: hash as Hex }),
-    client.getTransaction({ hash: hash as Hex }),
-    client.getChainId(),
-  ]);
+const invoicePaidEvent = parseAbiItem(
+  "event InvoicePaid(bytes32 indexed id, address indexed payer, address indexed payee, uint256 amount)",
+);
+const SEARCH_BLOCKS = 10_000n;
+const LOG_WINDOW = 2_000n;
+
+async function invoiceRecord(guard: Address, invoice: Invoice & { id: Hex }) {
   const record = (await client.readContract({
     address: guard,
     abi: artifact.abi,
     functionName: "invoices",
-    args: [v.id],
-  })) as any[];
-  validateRegistered(v, guard, record);
-  const checks = matchEvidence(v, guard, receipt, tx, chain);
+    args: [invoice.id],
+  })) as readonly [Address, Address, bigint, bigint, Hex, number];
+  validateRegistered(invoice, guard, record);
+  return record;
+}
+
+async function verifyReceipt(invoice: Invoice, guard: Address, hash: Hex) {
+  const [receipt, tx, chain] = await Promise.all([
+    client.getTransactionReceipt({ hash }),
+    client.getTransaction({ hash }),
+    client.getChainId(),
+  ]);
   return {
-    checks,
-    hash: hash as Hex,
+    checks: matchEvidence(invoice, guard, receipt, tx, chain),
+    hash,
     block: receipt.blockNumber.toString(),
     fetchedAt: new Date().toISOString(),
   };
+}
+
+export async function verifyInvoice(
+  invoice: Invoice,
+  contract: string,
+  hash: string,
+) {
+  if (!invoice.id || invoice.sample)
+    throw Error("Select an invoice registered on testnet first.");
+  if (!/^0x[0-9a-fA-F]{64}$/.test(hash))
+    throw Error("Invalid transaction hash.");
+
+  boundContract(invoice, contract);
+  const guard = await checkContract(contract);
+  await invoiceRecord(guard, { ...invoice, id: invoice.id });
+  return verifyReceipt(invoice, guard, hash as Hex);
+}
+
+export async function findPayment(invoice: Invoice, contract: string) {
+  if (!invoice.id || invoice.sample)
+    throw Error("Select an invoice registered on testnet first.");
+
+  boundContract(invoice, contract);
+  const guard = await checkContract(contract);
+  const record = await invoiceRecord(guard, { ...invoice, id: invoice.id });
+  if (record[5] === 3) throw Error("The merchant cancelled this invoice.");
+  if (record[5] !== 2)
+    throw Error("The chain has no completed payment for this invoice.");
+
+  const latest = await client.getBlockNumber();
+  const oldest = latest >= SEARCH_BLOCKS ? latest - SEARCH_BLOCKS + 1n : 0n;
+  for (let toBlock = latest; toBlock >= oldest; ) {
+    const fromBlock =
+      toBlock >= oldest + LOG_WINDOW ? toBlock - LOG_WINDOW + 1n : oldest;
+    const events = await client.getLogs({
+      address: guard,
+      event: invoicePaidEvent,
+      args: { id: invoice.id, payee: getAddress(invoice.recipient) },
+      fromBlock,
+      toBlock,
+      strict: true,
+    });
+    if (events.length > 1)
+      throw Error("Multiple records matched this invoice.");
+    const hash = events[0]?.transactionHash;
+    if (hash) return verifyReceipt(invoice, guard, hash);
+    if (fromBlock === oldest) break;
+    toBlock = fromBlock - 1n;
+  }
+  throw Error(
+    "No receipt in the latest 10,000 blocks. Paste the payment hash to check older transactions.",
+  );
 }

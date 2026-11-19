@@ -62,3 +62,7 @@ flowchart LR
   G -->|InvoicePaid event| R[Receipt verification]
   T -->|Exact Transfer event| R
 ```
+
+### Recover a payment after closing the page
+
+Open the registered invoice again. Leave the transaction hash empty and choose **Find payment on chain**. InvoiceGuard checks that the reviewed contract marks the invoice paid, then searches up to 10,000 recent blocks for its indexed payment event. It still verifies the successful receipt and exact official-token transfer. Supply the transaction hash directly for older payments.

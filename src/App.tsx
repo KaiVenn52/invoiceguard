@@ -4,6 +4,7 @@ import {
   registerInvoice,
   payInvoice,
   verifyInvoice,
+  findPayment,
   validateInvoice,
   deploySettlement,
   recoverSettlement,
@@ -210,11 +211,12 @@ export function App() {
   async function verify() {
     setChecks([]);
     setProof(null);
-    const p = await verifyInvoice(
-      invoice,
-      invoice.contract || guard,
-      hash.trim(),
-    );
+    const contract = invoice.contract || guard;
+    const paymentHash = hash.trim();
+    const p = paymentHash
+      ? await verifyInvoice(invoice, contract, paymentHash)
+      : await findPayment(invoice, contract);
+    setHash(p.hash);
     setChecks(p.checks);
     setProof(p);
     if (p.checks.every((c) => c.pass)) update({ paidHash: p.hash });
@@ -578,7 +580,7 @@ export function App() {
               <input
                 disabled={busy}
                 id="txhash"
-                placeholder="Enter transaction hash (0x…)"
+                placeholder="Optional · paste a payment hash"
                 value={hash}
                 onChange={(e) => {
                   setHash(e.target.value);
@@ -593,11 +595,16 @@ export function App() {
               disabled={busy}
               onClick={() => run(verify)}
             >
-              {busy ? "Checking…" : "Verify on chain"}
+              {busy
+                ? "Checking…"
+                : hash.trim()
+                  ? "Verify receipt"
+                  : "Find payment on chain"}
             </button>
             <p className="fine">
-              A successful payment must match network, contract, invoice, token,
-              recipient and amount.
+              Leave the hash blank to search the latest 10,000 blocks for a
+              registered invoice. Both the invoice event and the exact token
+              transfer must match.
             </p>
             {checks.length > 0 && (
               <ul className="checks">
