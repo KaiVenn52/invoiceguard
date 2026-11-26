@@ -66,3 +66,9 @@ flowchart LR
 ### Recover a payment after closing the page
 
 Open the registered invoice again. Leave the transaction hash empty and choose **Find payment on chain**. InvoiceGuard checks that the reviewed contract marks the invoice paid, then searches up to 10,000 recent blocks for its indexed payment event. It still verifies the successful receipt and exact official-token transfer. Supply the transaction hash directly for older payments.
+
+### Live Aevum testnet rehearsal
+
+With Node 24 use `node scripts/settle-aevum.mjs check <testnet-key-file>` to check account balances. The local key file must contain `merchant` and `buyer` private keys from two disposable testnet accounts. Keep that file outside the repository. The script fixes the chain to official QDay Aevum (44005) and checks the official token.
+
+With faucet funds, use `node scripts/settle-aevum.mjs run <testnet-key-file>` to deploy InvoiceGuard, register a demo invoice, approve the exact 0.125001 tUSD8 amount and settle from the buyer account. It funds the buyer with testnet assets if needed. It persists each transaction hash and writes an evidence JSON with explorer links only after all receipt checks pass. If a broadcast outcome was ambiguous, pause and recover the transaction hash from the account history before resuming the journal.
