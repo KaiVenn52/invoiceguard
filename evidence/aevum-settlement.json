@@ -1,0 +1,67 @@
+{
+  "network": "QDay Aevum Testnet",
+  "chainId": 44005,
+  "token": "0x456569838f1d43009A91ebA4263147Afd7233483",
+  "merchant": "0x37d60fCEBEa7A69175e235eb0aAD0b6AbE51eC3D",
+  "buyer": "0x7490a43CBb96A8C0b79D9Bdf54A6643Fe8969823",
+  "invoice": {
+    "key": "d4efa4e7-76d7-459e-80a3-e5f174c0baee",
+    "reference": "AEVUM-DEMO",
+    "customer": "Testnet demonstration",
+    "recipient": "0x37d60fCEBEa7A69175e235eb0aAD0b6AbE51eC3D",
+    "amount": "0.125001",
+    "expiresAt": 1796313080,
+    "nonce": "0x940fc9fca22af86b75e229157eb592d5b6e1f5867d3512aa0e4492753d939f7b",
+    "id": "0xf932513f0170505baf4b3e1064bdc36c13a141a69a7ab1aaf34ab40b624fce79",
+    "contract": "0x66e9af874146a197eaf4b3ef7e0750c827c5d814"
+  },
+  "transactions": {
+    "fundGas": {
+      "hash": "0xe3c4910b4309a38a0e5b4a5c3ed0c67bb8e117e1b4dcaf0c5d430737f33568ce",
+      "explorer": "https://explorer-test.qday.info/tx/0xe3c4910b4309a38a0e5b4a5c3ed0c67bb8e117e1b4dcaf0c5d430737f33568ce"
+    },
+    "fundToken": {
+      "hash": "0x48baba94ab6abe824422eb4af92f47a84df4ac1761eb79d79cf293ce1e93b52d",
+      "explorer": "https://explorer-test.qday.info/tx/0x48baba94ab6abe824422eb4af92f47a84df4ac1761eb79d79cf293ce1e93b52d"
+    },
+    "deploy": {
+      "hash": "0xa1050a331026d096306516f2d574873f92222db5ea70f14fd5deec50f1fe7f63",
+      "explorer": "https://explorer-test.qday.info/tx/0xa1050a331026d096306516f2d574873f92222db5ea70f14fd5deec50f1fe7f63"
+    },
+    "create": {
+      "hash": "0xce2d3f148d61249a6ce398c356c87a126139ffacaa6a36808263ce1b2863a415",
+      "explorer": "https://explorer-test.qday.info/tx/0xce2d3f148d61249a6ce398c356c87a126139ffacaa6a36808263ce1b2863a415"
+    },
+    "approve": {
+      "hash": "0xef3c9869570f2d03dcd5f11b3d7edf00b1ed0ae8571ede05351284a863637af7",
+      "explorer": "https://explorer-test.qday.info/tx/0xef3c9869570f2d03dcd5f11b3d7edf00b1ed0ae8571ede05351284a863637af7"
+    },
+    "pay": {
+      "hash": "0xf915b6fe0fb59aba2543385c3a785bca723f3de994388f1dec5b1493eebea3e8",
+      "explorer": "https://explorer-test.qday.info/tx/0xf915b6fe0fb59aba2543385c3a785bca723f3de994388f1dec5b1493eebea3e8"
+    }
+  },
+  "paymentBlock": "4185659",
+  "checks": [
+    {
+      "label": "Network",
+      "pass": true
+    },
+    {
+      "label": "Successful transaction",
+      "pass": true
+    },
+    {
+      "label": "Settlement contract",
+      "pass": true
+    },
+    {
+      "label": "Invoice event",
+      "pass": true
+    },
+    {
+      "label": "Exact token transfer",
+      "pass": true
+    }
+  ]
+}

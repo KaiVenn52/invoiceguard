@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "chainId": 44005,
+  "invoice": {
+    "key": "d4efa4e7-76d7-459e-80a3-e5f174c0baee",
+    "reference": "AEVUM-DEMO",
+    "customer": "Testnet demonstration",
+    "recipient": "0x37d60fCEBEa7A69175e235eb0aAD0b6AbE51eC3D",
+    "amount": "0.125001",
+    "expiresAt": 1796313080,
+    "nonce": "0x940fc9fca22af86b75e229157eb592d5b6e1f5867d3512aa0e4492753d939f7b",
+    "id": "0xf932513f0170505baf4b3e1064bdc36c13a141a69a7ab1aaf34ab40b624fce79",
+    "contract": "0x66e9af874146a197eaf4b3ef7e0750c827c5d814"
+  }
+}

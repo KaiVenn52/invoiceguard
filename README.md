@@ -20,19 +20,21 @@ Official tUSD8: `0x456569838f1d43009A91ebA4263147Afd7233483`, 6 decimals. RPC: `
 
 The sibling `../invoiceguard-contracts` contains Solidity sources and adversarial settlement tests. Run `npm ci`, `npm test`, `npm run build`, then `npm run sync-artifact` there. The last command updates this app's pinned ABI and bytecode. Rebuild the frontend after changing the contract.
 
-Deployment is not completed. The supplied Ignition module is `ignition/modules/InvoiceGuard.ts`. A testnet-only deploy can be run by the operator with their own testnet deployment account: `npx hardhat ignition deploy ignition/modules/InvoiceGuard.ts --network aevum`. See the contract README for configuration. Never use a funded mainnet key. Copy the resulting testnet address into the app, then collect a real create/payment/receipt demo.
+The demonstrated contract is deployed on Aevum at `0x66e9af874146a197eaf4b3ef7e0750c827c5d814`. To deploy a fresh instance, use the supplied `ignition/modules/InvoiceGuard.ts` module with `npx hardhat ignition deploy ignition/modules/InvoiceGuard.ts --network aevum` and a dedicated testnet account.
 
 ## Safety properties
 
 The contract rejects duplicate IDs, replayed payments, expired/cancelled invoices, unauthorized bound payers, self-payments, false-returning transfers and short/taxed token transfers. Creation is bound to the recipient's sender address; custody remains with buyer and merchant. Customer names/reference text remain in exported files and browser storage; only their hash is written on chain.
 
-## Submission gates
+## Live testnet evidence
 
-Public frontend, contracts source and hosted demo are available. Still required: actual Aevum contract deployment and payments, walkthrough, registration and submission receipt. The starter guide requires a live finalist presentation if selected.
+The demo merchant issued AEVUM-DEMO from its own wallet. A separate buyer approved exactly 125001 base units and paid 0.125001 tUSD8. The public app recovered the transaction by invoice and passed all five receipt checks. [Deployment](https://explorer-test.qday.info/tx/0xa1050a331026d096306516f2d574873f92222db5ea70f14fd5deec50f1fe7f63) · [Invoice creation](https://explorer-test.qday.info/tx/0xce2d3f148d61249a6ce398c356c87a126139ffacaa6a36808263ce1b2863a415) · [Exact approval](https://explorer-test.qday.info/tx/0xef3c9869570f2d03dcd5f11b3d7edf00b1ed0ae8571ede05351284a863637af7) · [Successful payment](https://explorer-test.qday.info/tx/0xf915b6fe0fb59aba2543385c3a785bca723f3de994388f1dec5b1493eebea3e8).
 
-## Evidence and limitations
+1. [Open the demo invoice](https://kaivenn52.github.io/invoiceguard/#invoice=%7B%22version%22%3A1%2C%22chainId%22%3A44005%2C%22invoice%22%3A%7B%22key%22%3A%22d4efa4e7-76d7-459e-80a3-e5f174c0baee%22%2C%22reference%22%3A%22AEVUM-DEMO%22%2C%22customer%22%3A%22Testnet%20demonstration%22%2C%22recipient%22%3A%220x37d60fCEBEa7A69175e235eb0aAD0b6AbE51eC3D%22%2C%22amount%22%3A%220.125001%22%2C%22expiresAt%22%3A1796313080%2C%22nonce%22%3A%220x940fc9fca22af86b75e229157eb592d5b6e1f5867d3512aa0e4492753d939f7b%22%2C%22id%22%3A%220xf932513f0170505baf4b3e1064bdc36c13a141a69a7ab1aaf34ab40b624fce79%22%2C%22contract%22%3A%220x66e9af874146a197eaf4b3ef7e0750c827c5d814%22%7D%7D) or import [the demo invoice JSON](evidence/aevum-demo-invoice.json) in the app.
+2. Paste `0xf915b6fe0fb59aba2543385c3a785bca723f3de994388f1dec5b1493eebea3e8` into Transaction hash and choose **Verify receipt**. A recent payment can also be found without the hash.
+3. Compare the checks with [the exported chain evidence](evidence/aevum-settlement.json).
 
-This is a working local prototype. Automated tests use fixtures and an in-process blockchain. They do not prove public deployment, registration, eligibility, a live wallet transaction or a submitted entry. No live payment is claimed. Testnet assets have no monetary value.
+The recorded timestamps and receipt are fixed-node observations. Local automated tests and tutorials use fixtures separately. No competition submission is claimed. Testnet assets have no monetary value.
 
 Run `npm ci`, `npm test`, `npm run build`, then `npm start`. Node 24 is supported. The production server serves the build and proxies only the fixed official upstream. Set `PORT` for hosting; terminate TLS at your hosting platform. A static-only host cannot serve the RPC proxy. A Dockerfile is included, but the container has not yet been built or deployed. No secrets are needed by the frontend or proxy.
 

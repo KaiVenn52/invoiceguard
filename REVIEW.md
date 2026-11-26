@@ -4,8 +4,10 @@ UI reference: design-concept.png (frontend projects). Native React/CSS implement
 
 Reviewed actual Chrome pages at desktop and 390px mobile width. SealCheck stacks fields and evidence panels, InvoiceGuard stacks its inspector and keeps the wide data table in a horizontally scrollable container. Temporary viewport overrides were reset. Desktop screenshots are in qa-desktop-final.jpg. SealCheck also has a saved mobile screenshot; InvoiceGuard mobile layout was observed, but its duplicate screenshot file was removed. No wallet transaction was executed during UI QA.
 
-Intent generation and disabled signing gate were exercised. InvoiceGuard sample-verification rejection and selection of a saved one-micro-token draft were exercised. Cross-device import logic has validation tests; an actual two-user testnet exchange remains pending.
+Intent generation and disabled signing gate were exercised. InvoiceGuard sample-verification rejection and selection of a saved one-micro-token draft were exercised. Cross-device import logic has validation tests.
 
 Public Pages deployment passed cloud tests/build/deploy. Chrome verified draft creation and direct official Aevum RPC access, including expected rejection of an address without deployed contract code. No wallet prompt or transaction was needed.
 
-Open quality gates: actual wallet/testnet integration; genuine demo video; final competition form review and receipt. Container build remains untested. No winner outcome is implied.
+Open quality gates: final competition form review and submission receipt. Container build remains untested. No winner outcome is implied.
+
+The 2026-11-26 Aevum testnet run used separate merchant and buyer accounts, the official tUSD8 token, and the reviewed runtime. Chrome verified the full receipt on the public demo and confirmed the transfer in the official explorer. See [the live evidence](evidence/aevum-settlement.json).
